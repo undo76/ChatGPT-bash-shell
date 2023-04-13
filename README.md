@@ -1,4 +1,4 @@
-# GPT-BASH ChatGPT plugin
+# ChatGPT Bash Shell plugin
 
 This is an experimantal plugin for executing bash commands in an Ubuntu docker container with ChatGPT. 
 
