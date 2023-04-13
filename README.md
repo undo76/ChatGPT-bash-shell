@@ -55,6 +55,11 @@ Just interact with the chat and it will execute the commands as needed:
 ![img_3.png](img_3.png)
 ![img_5.png](img_5.png)
 ![img_6.png](img_6.png)
+![img_7.png](img_7.png)
+
+And it generates this PDF (look at the first reference 😄):
+
+![img_8.png](img_8.png)
 
 ## License
 
