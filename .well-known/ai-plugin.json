@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "BashShell",
+  "name_for_model": "BashShell",
+  "description_for_human": "A plugin that let's you execute bash shell commands.",
+  "description_for_model": "A plugin that has access to an Ubuntu bash shell. You are root (no sudo needed). You can use it to execute any command or install anything. If you can't find a command, you can install it. Use always well formed JSON for calling this plugin.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://localhost:8000/openapi.json",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://localhost:8000/.well-known/logo.png",
+  "contact_email": "manolo.santos@gmail.com",
+  "legal_info_url": "https://example.com/legal"
+}

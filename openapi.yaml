@@ -1,0 +1,277 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "OpenAI Shell plugin",
+    "description": "This is a web server that executes shell commands and returns the output.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/": {
+      "post": {
+        "tags": [
+          "commands"
+        ],
+        "summary": "Execute a command",
+        "description": "Execute a command and return the output",
+        "operationId": "post_command__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Command"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The output from the command",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/files/{path}": {
+      "get": {
+        "summary": "Get File",
+        "description": "Get file from path.",
+        "operationId": "get_file_files__path__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Path",
+              "type": "string"
+            },
+            "name": "path",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Request"
+            },
+            "name": "request",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Post File",
+        "description": "Upload a file and saves it in path.",
+        "operationId": "post_file_files__path__post",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Path",
+              "type": "string"
+            },
+            "name": "path",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Command": {
+        "title": "Command",
+        "required": [
+          "command"
+        ],
+        "type": "object",
+        "properties": {
+          "command": {
+            "title": "Command",
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string",
+            "description": "Command to execute",
+            "example": "ls -l"
+          },
+          "cwd": {
+            "title": "Cwd",
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string",
+            "description": "Current working directory",
+            "example": "/tmp"
+          },
+          "env": {
+            "title": "Env",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Environment variables",
+            "example": {
+              "FOO": "BAR"
+            }
+          },
+          "timeout": {
+            "title": "Timeout",
+            "maximum": 86400,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Timeout in seconds",
+            "example": 60
+          },
+          "shell": {
+            "title": "Shell",
+            "type": "boolean",
+            "description": "Execute command in a shell",
+            "default": true,
+            "example": true
+          },
+          "stdin": {
+            "title": "Stdin",
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string",
+            "description": "Standard input to pass to the command",
+            "example": "Hello World"
+          }
+        },
+        "description": "The request body for the / command"
+      },
+      "CommandResponse": {
+        "title": "CommandResponse",
+        "required": [
+          "stdout",
+          "stderr",
+          "returncode"
+        ],
+        "type": "object",
+        "properties": {
+          "stdout": {
+            "title": "Stdout",
+            "maxLength": 1048576,
+            "minLength": 0,
+            "type": "string",
+            "description": "Standard output from the command"
+          },
+          "stderr": {
+            "title": "Stderr",
+            "maxLength": 1048576,
+            "minLength": 0,
+            "type": "string",
+            "description": "Standard error from the command"
+          },
+          "returncode": {
+            "title": "Returncode",
+            "maximum": 255,
+            "minimum": 0,
+            "type": "integer",
+            "description": "Return code from the command"
+          }
+        },
+        "description": "The response body for the / command"
+      },
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
